@@ -11,6 +11,8 @@ public class DVDCollection {
 	/*Boolean flag to indicate whether the  DVD collection was modified since it was saved*/
 	private boolean modified;
 	
+	private String sourceName;
+	
 	
 	public DVDCollection() {
 		numdvds= 0;
@@ -70,6 +72,91 @@ public class DVDCollection {
 		}
 		
 	}
+	
+	public void  removeDVD(String title) {
+		int index = DVDlookup(title);
+		
+		if (index >=0)
+		{
+			modified = true;
+			DVD[] newArray = new DVD[dvdArray.length-1];
+			System.arraycopy(dvdArray,0,newArray,0, index);
+			System.arraycopy(dvdArray,index+1,newArray,index,dvdArray.length-index-1);
+			dvdArray = newArray;
+			numdvds--;
+		}
+	}
+	
+	public  String getDVDsByRating(String rating) {
+		String findbyrating = "";
+		for (int i =0; i < numdvds; i++) {
+			if (rating.equals(dvdArray[i].getRating())) {
+				findbyrating += (dvdArray[i].getTitle()+'\n');
+			}
+		}
+		return findbyrating;
+	}
+	
+	
+	public int getTotalRunningTime() {
+		int calcruntime =0;
+		
+		for(int i =0; i< numdvds; i++) {
+			calcruntime += dvdArray[i].getRunningTime();
+		}
+		return calcruntime;
+	}
+	
+	
+	public void loadData (String filename) {
+		try {
+			FileReader fr = new FileReader("dvddata.txt");
+			BufferedReader br = new BufferedReader(fr);
+			
+			String Line;
+			
+			while ((Line = br.readLine()) != null) 
+			{
+				String[] content = Line.split(",");
+				if (content.length !=3) {
+					System.out.println("Eroor: Invalid DVD entry " + Line + "\n");
+					return;
+				}
+				addOrModifyDVD(content[0], content[1], content[2]);
+			}
+			modified = false;
+			sourceName= filename;
+			br.close();
+		}
+		catch(IOException e) {
+			
+		}
+		
+	}
+	
+	public void save() {
+		
+		try {
+			if(!modified) {
+				return;
+			}
+			FileWriter File = new FileWriter(sourceName);
+			
+			if (numdvds > 0) {
+				for (int j =0; j < numdvds; j++) {
+					File.write(dvdArray[j].getTitle()+ "," +dvdArray[j].getRating() + "," + dvdArray[j].getRunningTime());
+					File.write(System.lineSeparator());
+				}
+			}
+			File.close();
+			modified = false;
+		}
+		catch (IOException e) {
+			
+		}
+	}
+	
+	
 	
 	//additional private helper methods
 	private int Validruntime(String runningTime) {
