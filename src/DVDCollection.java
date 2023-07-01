@@ -11,12 +11,15 @@ public class DVDCollection {
 	/*Boolean flag to indicate whether the  DVD collection was modified since it was saved*/
 	private boolean modified;
 	
+	/*The name of data file that contain DVD data*/
 	private String sourceName;
 	
-	
+	/* Construct an empty directory as an array
+	 * Initial capacity of 10. We will double the size of array when capacity reach 10
+	 */
 	public DVDCollection() {
 		numdvds= 0;
-		dvdArray= new DVD[7];
+		dvdArray= new DVD[10];
 	}
 	public DVD[] DVDinfo() {
 		return dvdArray;
@@ -54,6 +57,7 @@ public class DVDCollection {
 			dvdArray[j].setRating(rating);
 			dvdArray[j].setRunningTime(runT);
 		}
+		//add DVD
 		else
 		{
 			if (numdvds < dvdArray.length)
