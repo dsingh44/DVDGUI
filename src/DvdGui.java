@@ -1,6 +1,4 @@
-
 import java.awt.LayoutManager;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
@@ -12,6 +10,7 @@ import java.awt.FlowLayout;
 public class DvdGui {
 	
 	private DVDCollection dvdlist;
+	private JTextArea textArea; 
 	JList dvdjlist;
 	JScrollPane dvdlstpane;
 	
@@ -22,12 +21,13 @@ public class DvdGui {
 		createWindow();
 	}
 	//declare j frame
-	JFrame frame = new JFrame("DvdGui");
+	JFrame frame = new JFrame("DVDGUI");
+	
 	private void createWindow() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		createUI(frame);
-		frame.setSize(560, 200);
+		frame.setSize(700, 240);
 		//center on screen
 		frame.setLocationRelativeTo(null);
 		//make visible
@@ -39,8 +39,19 @@ public class DvdGui {
 		LayoutManager layout = new FlowLayout();
 		
 		panel.setLayout(layout);
-		//create a text field
-		JTextField textField = new JTextField(20);
+		
+		//create a JText Area component
+		textArea = new JTextArea(10,30);
+		textArea.setEditable(false);
+		//add scroll bars to handle large amounts of text
+		JScrollPane scrollPane = new JScrollPane(textArea);
+		//Add scroll pane to the panel
+		panel.add(scrollPane);
+		
+		frame.getContentPane().add(panel);
+		
+		//Display DVD data in text area
+		textArea.setText(dvdlist.toString());
 		
 		dvdjlist = new JList();
 		dvdlstpane = new JScrollPane(dvdlstpane);
@@ -57,6 +68,7 @@ public class DvdGui {
 			}
 	
 		});
+		//create a vertical box for buttons
 		Box buttonBox = Box.createVerticalBox();
 		
 		//add modify button
@@ -101,13 +113,13 @@ public class DvdGui {
 				doexit();
 			}
 		});
-		
-		panel.add(addmodifyButton);
-		panel.add(removeButton);
-		panel.add(ratingButton);
-		panel.add(runningtimeButton);
-		panel.add(saveButton);
-		panel.add(ExitButton);
+		buttonBox.add(addmodifyButton);
+		buttonBox.add(removeButton);
+		buttonBox.add(ratingButton);
+		buttonBox.add(runningtimeButton);
+		buttonBox.add(saveButton);
+		buttonBox.add(ExitButton);
+		panel.add(buttonBox);
 		panel.add(dvdjlist);
 		
 		
@@ -141,11 +153,14 @@ public class DvdGui {
 		//Add or modify the DVD
 		dvdlist.addOrModifyDVD(title, rating, time);
 		
+		//update DVD data in the text area
+		textArea.setText(dvdlist.toString());
+		
 		//Display current collection to console for debugging
 		JOptionPane.showMessageDialog(frame,"Adding/Modifying: " + title +"," +rating + ","+ time);
-		JOptionPane.showMessageDialog(frame,dvdlist);
-		
+		JOptionPane.showMessageDialog(frame,dvdlist);	
 	}
+	
 	private void doRemoveDVD() {
 		//Request the title
 		String title = JOptionPane.showInputDialog("Enter title");
@@ -157,10 +172,12 @@ public class DvdGui {
 		//remove DVD
 		dvdlist.removeDVD(title);
 		
+		//Update DVD data in the text area
+		textArea.setText(dvdlist.toString());
+		
 		//Display current collection to console for debugging
 		JOptionPane.showMessageDialog(frame,"Removing: " + title);
 		JOptionPane.showMessageDialog(frame,dvdlist);
-		
 	}
 	
 	private void doGetDVDsByRating() {
@@ -173,8 +190,7 @@ public class DvdGui {
 		
 		String results = dvdlist.getDVDsByRating(rating);
 		JOptionPane.showMessageDialog(frame,"DVDs with rating "+rating);
-		JOptionPane.showMessageDialog(frame,results);
-		
+		JOptionPane.showMessageDialog(frame,results);	
 	}
 	
 	private void doGetTotalRunningTime() {
@@ -191,9 +207,6 @@ public class DvdGui {
 	
 	private void doexit() {
 		JOptionPane.showMessageDialog(frame,"Click ok to exit");
-		System.exit(0);
-		
+		System.exit(0);	
 	}
-	
-
 }

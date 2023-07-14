@@ -25,19 +25,23 @@ public class DVDCollection {
 		return dvdArray;
 	}
 	
+	/* Convert the DVD collection to a string representation
+	 * return string representation of DVD collection
+	 */
 	
 	public String toString() {
-		
 		String stringdvds ="";
-		stringdvds += "\n" + "numdvds = " + numdvds + '\n' +"dvdArray.length" + " " +dvdArray.length+'\n';
+		stringdvds += "\n" + "Total DVDs: " + numdvds + "\n \n";
 		
 		for (int i = 0; i< numdvds;i++) {
-			stringdvds += "dvdArray [" + i+ "] "+dvdArray[i].getTitle() +  " " + dvdArray[i].getRating() + " "+ dvdArray[i].getRunningTime()+'\n';
+			stringdvds += dvdArray[i].getTitle() +  "  " + dvdArray[i].getRating() + " "+ dvdArray[i].getRunningTime()+'\n';
 		}
 		return stringdvds;
 	}
 	
-	
+	/* Add or modifies a DVD in the collection based on provided information
+	 * @param Title , rating , running time of DVD
+	 */
 	public void addOrModifyDVD (String title, String rating, String runningTime) {
 		
 		if(!(rating.equals ("NC-17")|| rating.equals("PG-13") || rating.equals("PG") || rating.equals("R") || rating.equals("G"))) {
@@ -50,8 +54,8 @@ public class DVDCollection {
 		modified = true;
 		int j= DVDlookup(title);
 		
-		//dvd already in collection
-		if (j > 0)
+		//DVD already in collection
+		if (j >= 0)
 		{
 			dvdArray[j].setTitle(title);
 			dvdArray[j].setRating(rating);
@@ -70,13 +74,14 @@ public class DVDCollection {
 				DVD[] newArray = new DVD [dvdArray.length * 2];
 				System.arraycopy(dvdArray, 0, newArray, 0, numdvds);
 				dvdArray = newArray;
-				System.out.print(toString());
-				
+				System.out.print(toString());	
 			}
 		}
-		
 	}
 	
+	/* Removes a DVD from the collection based on provided title
+	 * @param title The title of DVD to be removed.
+	 */
 	public void  removeDVD(String title) {
 		int index = DVDlookup(title);
 		
@@ -90,7 +95,11 @@ public class DVDCollection {
 			numdvds--;
 		}
 	}
-	
+	/*
+	 * Retrieves DVDs from the collection that match the specified rating.
+	 * @param rating The rating to filter the DVDs 
+	 * @return A string containing title of DVDs that match the rating.
+	 */
 	public  String getDVDsByRating(String rating) {
 		String findbyrating = "";
 		for (int i =0; i < numdvds; i++) {
@@ -101,7 +110,9 @@ public class DVDCollection {
 		return findbyrating;
 	}
 	
-	
+	/* Calculates the total running time of all DVDs in the collection
+	 * @return The total running time in minutes.
+	 */
 	public int getTotalRunningTime() {
 		int calcruntime =0;
 		
@@ -111,10 +122,12 @@ public class DVDCollection {
 		return calcruntime;
 	}
 	
-	
+	/* Loads DVD data from a file and add or modifies DVD in the collection based on the data.
+	 * @param filename The name of the file to load the data from.
+	 */
 	public void loadData (String filename) {
 		try {
-			FileReader fr = new FileReader("dvddata.txt");
+			FileReader fr = new FileReader(filename);
 			BufferedReader br = new BufferedReader(fr);
 			
 			String Line;
@@ -134,9 +147,12 @@ public class DVDCollection {
 		}
 		catch(IOException e) {
 			
-		}
-		
+		}	
 	}
+	/* Save the DVD collection to a file
+	 * if the collection has not been modified, it does nothing.
+	 * write each DVD title, rating , running time to the file.
+	 */
 	
 	public void save() {
 		
@@ -160,8 +176,6 @@ public class DVDCollection {
 		}
 	}
 	
-	
-	
 	//additional private helper methods
 	private int Validruntime(String runningTime) {
 		int runT=0;
@@ -176,7 +190,6 @@ public class DVDCollection {
 		return runT;	
 	}
 	
-	
 	private int DVDlookup(String title) 
 	{
 		if (numdvds > 0) 
@@ -190,9 +203,5 @@ public class DVDCollection {
 			}
 		}
 		return -1 ;
-		
 	}
-	
-	
-
 }

@@ -1,6 +1,5 @@
 public class DVD 
 {
-	
 	private String title;     //Title of DVD
 	private String rating;    //Rating of this DVD
 	private int runningTime;  //Running time of this DVD in minutes
@@ -39,8 +38,6 @@ public class DVD
 		runningTime = newRunningTime;
 	}
 	public String toString() {
-		
 		return null;
 	}
-	
 }

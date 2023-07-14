@@ -7,10 +7,6 @@ public class DVDManager {
 		DVDCollection dl = new DVDCollection();
 		
 		dl.loadData("dvddata.txt");
-		
 		DvdGui dgui = new DvdGui(dl);
-		
-		
 	}
-
 }
